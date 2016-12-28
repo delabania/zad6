@@ -34,6 +34,7 @@ public:
 		_health = damage > _health ? 0 : _health - damage;
 	}
 
+	//virtual ~Monster() = default;
 };
 
 
