@@ -56,31 +56,28 @@ public:
 };
 
 
-//zaprzyjazniona klasa?
 //@TODO : co z martwymi potworami?
 class GroupOfMonsters {
 private:
-	std::vector<std::unique_ptr<Monster> > _monsters;
+	std::vector<std::shared_ptr<Monster>> _monsters;
 public:
-	GroupOfMonsters(std::vector<std::unique_ptr<Monster> > monsters) :
-		_monsters(std::move(monsters)) {}
-	/*
-	Tu jeszcze cos nie dziala - moze nie robic na unique_ptr, tylko shared?
-	http://stackoverflow.com/questions/8468774/can-i-list-initialize-a-vector-of-move-only-type/8469002#8469002
-	http://stackoverflow.com/questions/9618268/initializing-container-of-unique-ptrs-from-initializer-list-fails-with-gcc-4-7
-
-	GroupOfMonsters(std::initializer_list<std::unique_ptr<Monster> > monsters) :
-	_monsters(std::move(monsters)) {}*/
+	// 1. shared_ptr czy unique_ptr?
+	// 2. kopiowanie initializer_list / vector czy jakies manipulacje na rvalue ref.?
+	GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters) :
+		_monsters(monsters) {}
+	GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters) :
+		_monsters(monsters) {}
 
 
-	HealthPoints getHealth() {
-		HealthPoints h;
+
+	HealthPoints getHealth() const {
+		HealthPoints h = 0;
 		for (auto const & m : _monsters)
 			h += m->getHealth();
 		return h;
 	}
-	AttackPower getAttackPower() {
-		AttackPower ap;
+	AttackPower getAttackPower() const {
+		AttackPower ap = 0;
 		for (auto const & m : _monsters)
 			if (m->getHealth() > 0)
 				ap += m->getAttackPower();
@@ -95,16 +92,25 @@ public:
 
 
 auto createMummy(HealthPoints health, AttackPower attack) {
-	return std::make_unique<Mummy>(health, attack);
+	return std::make_shared<Mummy>(health, attack);
 }
 auto createZombie(HealthPoints health, AttackPower attack) {
-	return std::make_unique<Zombie>(health, attack);
+	return std::make_shared<Zombie>(health, attack);
 }
 auto createVampire(HealthPoints health, AttackPower attack) {
-	return std::make_unique<Vampire>(health, attack);
+	return std::make_shared<Vampire>(health, attack);
 }
 
-GroupOfMonsters createGroupOfMonsters(std::initializer_list<Monster>);
+
+auto createGroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters) {
+	return std::make_shared<GroupOfMonsters>(monsters);
+}
+
+/*
+GroupOfMonsters createGroupOfMonsters(const std::initializer_list<std::shared_ptr<Monster>> & monsters) {
+	return GroupOfMonsters(monsters);
+}*/
+
 
 
 #endif /*__MONSTER_H__*/
