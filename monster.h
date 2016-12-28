@@ -1,7 +1,9 @@
-#define __MONSTER_H__
 #ifndef __MONSTER_H__
+#define __MONSTER_H__
 
 #include "helper.h"
+#include <cassert>
+#include <memory>
 #include <vector>
 #include <initializer_list>
 
@@ -13,10 +15,13 @@ protected:
 
 	Monster(HealthPoints health, AttackPower attack) :
 		_health(health),
-		_attack(attack) {}
+		_attack(attack) {
+		assert(attack >= 0);
+		assert(health > 0);
+	}
 
 public:
-	Health getHealth() const {
+	HealthPoints getHealth() const {
 		return _health;
 	}
 
@@ -26,8 +31,7 @@ public:
 
 	void takeDamage(AttackPower damage) {
 		assert(damage > 0);
-		_age = damage > _age ? 0 : _age - damage;
-
+		_health = damage > _health ? 0 : _health - damage;
 	}
 
 };
@@ -39,12 +43,14 @@ public:
 		Monster(health, attack) {}
 };
 
-class Vampire L public Monster {
+class Vampire : public Monster {
+public:
 	Vampire(HealthPoints health, AttackPower attack) :
 		Monster(health, attack) {}
 };
 
 class Mummy : public Monster {
+public:
 	Mummy(HealthPoints health, AttackPower attack) :
 		Monster(health, attack) {}
 };
@@ -54,38 +60,49 @@ class Mummy : public Monster {
 //@TODO : co z martwymi potworami?
 class GroupOfMonsters {
 private:
-	std::vector<Monster> _monsters;
+	std::vector<std::unique_ptr<Monster> > _monsters;
 public:
-	GroupOfMonsters(std::vector<Monster> monsters) :
-		_monsters(monsters) {}
-	GroupOfMonsters(std::initializer_list<Monster>) :
-		_monsters(monsters) {}
+	GroupOfMonsters(std::vector<std::unique_ptr<Monster> > monsters) :
+		_monsters(std::move(monsters)) {}
+		/*
+		Tu jeszcze cos nie dziala - moze nie robic na unique_ptr, tylko shared?
+		http://stackoverflow.com/questions/8468774/can-i-list-initialize-a-vector-of-move-only-type/8469002#8469002
+		http://stackoverflow.com/questions/9618268/initializing-container-of-unique-ptrs-from-initializer-list-fails-with-gcc-4-7
+	
+	GroupOfMonsters(std::initializer_list<std::unique_ptr<Monster> > monsters) :
+		_monsters(std::move(monsters)) {}*/
 
 
-	Health getHealth() {
-		Health h;
+	HealthPoints getHealth() {
+		HealthPoints h;
 		for (auto const & m : _monsters)
-			h += m.getHealth();
+			h += m->getHealth();
 		return h;
 	}
 	AttackPower getAttackPower() {
 		AttackPower ap;
 		for (auto const & m : _monsters)
-			if (m.getHealth() > 0)
-				h += m.getAttackPower();
+			if (m->getHealth() > 0)
+				ap += m->getAttackPower();
 		return ap;
 	}
 	void takeDamage(AttackPower damage) {
-		for(auto & m : _monsters)
-			m.takeDamage(damage);
+		for (auto & m : _monsters)
+			m->takeDamage(damage);
 	}
 };
 
 
 
-Mummy createMummy(HealthPoints health, AttackPower attack);
-Zombie createZombie(HealthPoints health, AttackPower attack);
-Vampiere createVampire(HealthPoints health, AttackPower attack);
+auto createMummy(HealthPoints health, AttackPower attack) {
+	return std::make_unique<Mummy>(health, attack);
+}
+auto createZombie(HealthPoints health, AttackPower attack) {
+	return std::make_unique<Zombie>(health, attack);
+}
+auto createVampire(HealthPoints health, AttackPower attack) {
+	return std::make_unique<Vampire>(health, attack);
+}
 
 GroupOfMonsters createGroupOfMonsters(std::initializer_list<Monster>);
 

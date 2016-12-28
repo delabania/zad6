@@ -2,17 +2,9 @@
 #define __HELPER_H__
 
 
-class HealthPoints {
-
-};
-
-class Age {
-
-};
-
-class AttackPower {
-
-};
+typedef int HealthPoints;
+typedef int AttackPower;
+typedef int Age;
 
 
 #endif /*__HELPER_H__ */

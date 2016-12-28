@@ -2,6 +2,7 @@
 #define __CITIZEN_H__
 
 #include "helper.h"
+#include <memory>
 #include <cassert>
 
 
@@ -11,7 +12,9 @@ protected:
 	Age _age;
 
 	Citizen(HealthPoints health, Age age) :
-		_health(health), _age(age) {}
+		_health(health), _age(age) {
+		assert(health > 0);
+	}
 
 public :
 	HealthPoints getHealth() const {
@@ -24,7 +27,7 @@ public :
 
 	void takeDamage(AttackPower damage) {
 		assert(damage > 0);
-		_age = damage > _age ? 0 : _age - damage;
+		_health = damage > _health ? 0 : _health - damage;
 	}
 };
 
@@ -37,26 +40,42 @@ public:
 };
 
 class Teenager : public Citizen {
-	Teenager(HealthPoints health, Age age)
-	Citizen(health, age) {
+public:
+	Teenager(HealthPoints health, Age age) :
+		Citizen(health, age) {
 		assert(11 <= age && age <= 17);
 	}
 
-}
+};
 
 class Sheriff : public Citizen {
 private:
 	AttackPower _attack;
 public:
+	Sheriff(HealthPoints health, Age age, AttackPower attack) :
+		Citizen(health, age) {
+		assert(18 <= age && age <= 100);
+		assert(attack >= 0);
+	}
+
 	AttackPower getAttackPower() const {
 		return _attack;
 	}
 
+};
+
+
+auto createAdult(HealthPoints health, Age age) {
+	return std::make_unique<Adult>(health, age);
 }
 
-Adult createAdult(HealthPoints health, Age age);
-Teenanger createTeenager(HealthPoints health, Age age);
-Sheriff createSheriff(HealthPoints health, Age age, AttackPower _attack);
+auto createTeenager(HealthPoints health, Age age) {
+	return std::make_unique<Teenager>(health, age);
+}
+
+auto createSheriff(HealthPoints health, Age age, AttackPower attack) {
+	return std::make_unique<Sheriff>(health, age, attack);
+}
 
 
 #endif /* __CITIZEN_H__ */
