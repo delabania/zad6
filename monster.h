@@ -64,13 +64,13 @@ private:
 public:
 	GroupOfMonsters(std::vector<std::unique_ptr<Monster> > monsters) :
 		_monsters(std::move(monsters)) {}
-		/*
-		Tu jeszcze cos nie dziala - moze nie robic na unique_ptr, tylko shared?
-		http://stackoverflow.com/questions/8468774/can-i-list-initialize-a-vector-of-move-only-type/8469002#8469002
-		http://stackoverflow.com/questions/9618268/initializing-container-of-unique-ptrs-from-initializer-list-fails-with-gcc-4-7
-	
+	/*
+	Tu jeszcze cos nie dziala - moze nie robic na unique_ptr, tylko shared?
+	http://stackoverflow.com/questions/8468774/can-i-list-initialize-a-vector-of-move-only-type/8469002#8469002
+	http://stackoverflow.com/questions/9618268/initializing-container-of-unique-ptrs-from-initializer-list-fails-with-gcc-4-7
+
 	GroupOfMonsters(std::initializer_list<std::unique_ptr<Monster> > monsters) :
-		_monsters(std::move(monsters)) {}*/
+	_monsters(std::move(monsters)) {}*/
 
 
 	HealthPoints getHealth() {
