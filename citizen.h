@@ -66,15 +66,15 @@ public:
 
 
 auto createAdult(HealthPoints health, Age age) {
-	return std::make_unique<Adult>(health, age);
+	return std::make_shared<Adult>(health, age);
 }
 
 auto createTeenager(HealthPoints health, Age age) {
-	return std::make_unique<Teenager>(health, age);
+	return std::make_shared<Teenager>(health, age);
 }
 
 auto createSheriff(HealthPoints health, Age age, AttackPower attack) {
-	return std::make_unique<Sheriff>(health, age, attack);
+	return std::make_shared<Sheriff>(health, age, attack);
 }
 
 
