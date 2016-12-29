@@ -1,4 +1,5 @@
 #include "smalltown.h"
+#include <memory>
 
 
 /**
@@ -6,7 +7,7 @@
  */
 
 // virtual czy nie?
-void Time::tick() {
+void Time::tick(int t) {
 	_time += t;
 	_time %= _maxTime;
 }
@@ -40,7 +41,7 @@ Status::Status(const std::string & monsterName, HealthPoints monsterHealth,
 	_monsterHealth(monsterHealth),
 	_aliveCitizens(aliveCitizens) {}
 
-std::string Status::getMonsterName() {
+const std::string & Status::getMonsterName() {
 	return _monsterName;
 }
 HealthPoints Status::getMonsterHealth() {
@@ -54,6 +55,9 @@ unsigned int Status::getAliveCitizens() {
 /**
  * SmallTown
  */
+//@TODO : cos tu jest syfiascie jesli chodiz o wzorzec strategia
+SmallTown::SmallTown() : _time(std::make_shared<TownTime>()) {}
+
 
 void SmallTown::tick(int timeStep) {
 	assert(timeStep >= 0);
@@ -64,9 +68,13 @@ void SmallTown::tick(int timeStep) {
 
 }
 
+
+
+
 SmallTown::Builder::Builder() : _town(std::make_shared<SmallTown>()) {}
 
 SmallTown::Builder & SmallTown::Builder::startTime(int t0) {
+	assert(_town->_time);
 	_town->_time->setStartTime(t0);
 	return *this;
 }
@@ -82,7 +90,7 @@ SmallTown::Builder & SmallTown::Builder::citizen(std::shared_ptr<Citizen> c) {
 }
 
 
-SmallTown SmallTown::Build::build() {
+SmallTown SmallTown::Builder::build() {
 	return *_town;
 }
 

@@ -49,6 +49,7 @@ private:
 	std::shared_ptr<Time> _time;
 	std::vector<std::shared_ptr<Citizen>> _citizens;
 public:
+	SmallTown();
 	Status getStatus();
 	void tick(int timeStep);
 
@@ -64,7 +65,6 @@ public:
 		Builder & citizen(std::shared_ptr<Citizen>);
 		SmallTown build();
 	};
-
 
 };
 

@@ -65,17 +65,8 @@ public:
 };
 
 
-auto createAdult(HealthPoints health, Age age) {
-	return std::make_shared<Adult>(health, age);
-}
-
-auto createTeenager(HealthPoints health, Age age) {
-	return std::make_shared<Teenager>(health, age);
-}
-
-auto createSheriff(HealthPoints health, Age age, AttackPower attack) {
-	return std::make_shared<Sheriff>(health, age, attack);
-}
-
+std::shared_ptr<Adult> createAdult(HealthPoints health, Age age);
+std::shared_ptr<Teenager> createTeenager(HealthPoints health, Age age);
+std::shared_ptr<Sheriff> createSheriff(HealthPoints health, Age age, AttackPower attack);
 
 #endif /* __CITIZEN_H__ */

@@ -92,25 +92,10 @@ public:
 
 
 
-auto createMummy(HealthPoints health, AttackPower attack) {
-	return std::make_shared<Mummy>(health, attack);
-}
-auto createZombie(HealthPoints health, AttackPower attack) {
-	return std::make_shared<Zombie>(health, attack);
-}
-auto createVampire(HealthPoints health, AttackPower attack) {
-	return std::make_shared<Vampire>(health, attack);
-}
-
-
-auto createGroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters) {
-	return std::make_shared<GroupOfMonsters>(monsters);
-}
-
-/*
-GroupOfMonsters createGroupOfMonsters(const std::initializer_list<std::shared_ptr<Monster>> & monsters) {
-	return GroupOfMonsters(monsters);
-}*/
+std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attack);
+std::shared_ptr<Zombie> createZombie(HealthPoints health, AttackPower attack);
+std::shared_ptr<Vampire> createVampire(HealthPoints health, AttackPower attack);
+std::shared_ptr<GroupOfMonsters> createGroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters);
 
 
 
