@@ -12,48 +12,28 @@ class Monster {
 protected:
 	HealthPoints _health;
 	AttackPower _attack;
-
-	Monster(HealthPoints health, AttackPower attack) :
-		_health(health),
-		_attack(attack) {
-		assert(attack >= 0);
-		assert(health > 0);
-	}
-
+	Monster(HealthPoints, AttackPower);
 public:
-	HealthPoints getHealth() const {
-		return _health;
-	}
-
-	AttackPower getAttackPower() const {
-		return _attack;
-	}
-
-	void takeDamage(AttackPower damage) {
-		assert(damage > 0);
-		_health = damage > _health ? 0 : _health - damage;
-	}
-
-	//virtual ~Monster() = default;
+	HealthPoints getHealth() const;
+	AttackPower getAttackPower() const;
+	void takeDamage(AttackPower damage);
+	virtual ~Monster() = default;
 };
 
 
 class Zombie : public Monster {
 public:
-	Zombie(HealthPoints health, AttackPower attack) :
-		Monster(health, attack) {}
+	Zombie(HealthPoints health, AttackPower attack);
 };
 
 class Vampire : public Monster {
 public:
-	Vampire(HealthPoints health, AttackPower attack) :
-		Monster(health, attack) {}
+	Vampire(HealthPoints health, AttackPower attack);
 };
 
 class Mummy : public Monster {
 public:
-	Mummy(HealthPoints health, AttackPower attack) :
-		Monster(health, attack) {}
+	Mummy(HealthPoints health, AttackPower attack);
 };
 
 
@@ -69,25 +49,9 @@ public:
 	GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters) :
 		_monsters(monsters) {}
 
-
-
-	HealthPoints getHealth() const {
-		HealthPoints h = 0;
-		for (auto const & m : _monsters)
-			h += m->getHealth();
-		return h;
-	}
-	AttackPower getAttackPower() const {
-		AttackPower ap = 0;
-		for (auto const & m : _monsters)
-			if (m->getHealth() > 0)
-				ap += m->getAttackPower();
-		return ap;
-	}
-	void takeDamage(AttackPower damage) {
-		for (auto & m : _monsters)
-			m->takeDamage(damage);
-	}
+	HealthPoints getHealth() const;
+	AttackPower getAttackPower() const;
+	void takeDamage(AttackPower damage);
 };
 
 

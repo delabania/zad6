@@ -6,7 +6,6 @@
 #include "citizen.h"
 #include <string>
 #include <memory>
-#include <cassert>
 
 
 // Wzorzec strategia
@@ -19,6 +18,7 @@ public:
 	void setStartTime(int);
 	void setMaxTime(int);
 	virtual bool isAttackTime() = 0;
+	virtual ~Time() = default;
 };
 
 // Wystarczy stworzyc nowa klase dziedziczaca po Time,

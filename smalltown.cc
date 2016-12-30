@@ -1,5 +1,6 @@
 #include "smalltown.h"
 #include <memory>
+#include <cassert>
 
 
 /**
@@ -55,9 +56,8 @@ unsigned int Status::getAliveCitizens() {
 /**
  * SmallTown
  */
-//@TODO : cos tu jest syfiascie jesli chodiz o wzorzec strategia
+//@TODO : czy to na pewno jest "ladnie"?
 SmallTown::SmallTown() : _time(std::make_shared<TownTime>()) {}
-
 
 void SmallTown::tick(int timeStep) {
 	assert(timeStep >= 0);
@@ -67,8 +67,6 @@ void SmallTown::tick(int timeStep) {
 	_time->tick(timeStep);
 
 }
-
-
 
 
 SmallTown::Builder::Builder() : _town(std::make_shared<SmallTown>()) {}

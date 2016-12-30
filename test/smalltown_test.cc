@@ -14,5 +14,4 @@ int main() {
 	                 .citizen(createTeenager(50, 14))
 	                 .build();
 
-	cout << smallTown.function() << endl;             
 }
