@@ -6,61 +6,83 @@
 #include <memory>
 #include <vector>
 #include <initializer_list>
+#include <string>
 
-
+// Podstawowy abstrakcyjny interfejs potwora
 class Monster {
+public:
+	virtual ~Monster() = default;
+
+	virtual HealthPoints getHealth() const = 0;
+	virtual AttackPower getAttackPower() const = 0;
+	virtual void takeDamage(AttackPower damage) = 0;
+
+	virtual std::string getName() const = 0;
+};
+
+// Bazowa, konkretna implementacja pojedynczego potwora
+class SingleMonster : public Monster {
 protected:
 	HealthPoints _health;
 	AttackPower _attack;
-	Monster(HealthPoints, AttackPower);
+
+	SingleMonster(HealthPoints, AttackPower);
 public:
-	HealthPoints getHealth() const;
-	AttackPower getAttackPower() const;
-	void takeDamage(AttackPower damage);
-	virtual ~Monster() = default;
+	virtual ~SingleMonster() = default;
+
+	virtual HealthPoints getHealth() const override;
+	virtual AttackPower getAttackPower() const override;
+	virtual void takeDamage(AttackPower damage) override;
 };
 
-
-class Zombie : public Monster {
+class Zombie : public SingleMonster {
 public:
-	Zombie(HealthPoints health, AttackPower attack);
+	Zombie(HealthPoints, AttackPower);
+
+	virtual std::string getName() const override;
 };
 
-class Vampire : public Monster {
+class Vampire : public SingleMonster {
 public:
-	Vampire(HealthPoints health, AttackPower attack);
+	Vampire(HealthPoints, AttackPower);
+
+	virtual std::string getName() const override;
 };
 
-class Mummy : public Monster {
+class Mummy : public SingleMonster {
 public:
-	Mummy(HealthPoints health, AttackPower attack);
+	Mummy(HealthPoints, AttackPower);
+
+	virtual std::string getName() const override;
 };
 
 
 //@TODO : co z martwymi potworami?
-class GroupOfMonsters {
+// Konkretna implementacja grupy potworow
+class GroupOfMonsters : public Monster {
 private:
 	std::vector<std::shared_ptr<Monster>> _monsters;
 public:
+	virtual ~GroupOfMonsters() = default;
+
 	// 1. shared_ptr czy unique_ptr?
-	// 2. kopiowanie initializer_list / vector czy jakies manipulacje na rvalue ref.?
-	GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters) :
+	GroupOfMonsters(const std::vector<std::shared_ptr<Monster>>& monsters) :
 		_monsters(monsters) {}
+	// Kopiowanie initializer_list jest tanie (to tylko wrapper) i ogolnie przyjete (np. robi to STL)
 	GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters) :
 		_monsters(monsters) {}
 
-	HealthPoints getHealth() const;
-	AttackPower getAttackPower() const;
-	void takeDamage(AttackPower damage);
+	virtual HealthPoints getHealth() const override;
+	virtual AttackPower getAttackPower() const override;
+	virtual void takeDamage(AttackPower damage) override;
+
+	virtual std::string getName() const override;
 };
-
-
 
 std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attack);
 std::shared_ptr<Zombie> createZombie(HealthPoints health, AttackPower attack);
 std::shared_ptr<Vampire> createVampire(HealthPoints health, AttackPower attack);
 std::shared_ptr<GroupOfMonsters> createGroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters);
 
-
-
 #endif /*__MONSTER_H__*/
+

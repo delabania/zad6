@@ -3,22 +3,22 @@
 /**
  * Monster
  */
-Monster::Monster(HealthPoints health, AttackPower attack) :
+SingleMonster::SingleMonster(HealthPoints health, AttackPower attack) :
 	_health(health),
 	_attack(attack) {
 	assert(attack >= 0);
 	assert(health > 0);
 }
 
-HealthPoints Monster::getHealth() const {
+HealthPoints SingleMonster::getHealth() const {
 	return _health;
 }
 
-AttackPower Monster::getAttackPower() const {
+AttackPower SingleMonster::getAttackPower() const {
 	return _attack;
 }
 
-void Monster::takeDamage(AttackPower damage) {
+void SingleMonster::takeDamage(AttackPower damage) {
 	assert(damage > 0);
 	_health = damage > _health ? 0 : _health - damage;
 }
@@ -29,21 +29,31 @@ void Monster::takeDamage(AttackPower damage) {
  * Zombie
  */
 Zombie::Zombie(HealthPoints health, AttackPower attack) :
-	Monster(health, attack) {}
+	SingleMonster(health, attack) {}
 
+std::string Zombie::getName() const {
+	return "Zombie";
+}
 
 /**
  * Vampire
  */
 Vampire::Vampire(HealthPoints health, AttackPower attack) :
-	Monster(health, attack) {}
+	SingleMonster(health, attack) {}
 
+std::string Vampire::getName() const {
+	return "Vampire";
+}
 
 /**
  * Mummy
  */
 Mummy::Mummy(HealthPoints health, AttackPower attack) :
-	Monster(health, attack) {}
+	SingleMonster(health, attack) {}
+
+std::string Mummy::getName() const {
+	return "Mummy";
+}
 
 /**
  * GroupOfMonsters
@@ -67,6 +77,9 @@ void GroupOfMonsters::takeDamage(AttackPower damage) {
 		m->takeDamage(damage);
 }
 
+std::string GroupOfMonsters::getName() const {
+	return "GroupOfMonsters";
+}
 
 
 /**
