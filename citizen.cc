@@ -53,6 +53,9 @@ Sheriff::Sheriff(HealthPoints health, Age age, AttackPower attack) :
 	assert(attack >= 0);
 }
 
+Sheriff::~Sheriff() {
+}
+
 AttackPower Sheriff::getAttackPower() const {
 	return _attack;
 }

@@ -33,6 +33,7 @@ private:
 	AttackPower _attack;
 public:
 	Sheriff(HealthPoints, Age, AttackPower);
+	virtual ~Sheriff();
 	AttackPower getAttackPower() const;
 };
 
