@@ -28,3 +28,6 @@
 *.out
 *.app
 *_test
+
+# Vim swap files
+*.swp
