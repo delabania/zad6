@@ -17,7 +17,7 @@ public:
 	void tick(int);
 	void setStartTime(int);
 	void setMaxTime(int);
-	virtual bool isAttackTime() = 0;
+	virtual bool isAttackTime() const = 0;
 	virtual ~Time() = default;
 };
 
@@ -25,7 +25,7 @@ public:
 // aby ustalic inna strategie ataku potworow
 class TownTime : public Time {
 public:
-	bool isAttackTime();
+	virtual bool isAttackTime() const override;
 };
 
 

@@ -27,7 +27,7 @@ void Time::setMaxTime(int t1) {
  * TownTime
  */
 
-bool TownTime::isAttackTime() {
+bool TownTime::isAttackTime() const {
 	return ((_time % 3 == 0) || (_time % 13 == 0)) && (_time % 7 != 0);
 }
 
