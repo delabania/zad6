@@ -1,4 +1,5 @@
-# make [DEBUG=1] TEST_FILE=smalltown_test.cc etc.
+# make [DEBUG=1] [test]
+# make [DEBUG=1] [test/smalltown_test.cc]
 
 SRCS = $(wildcard *.cc)
 OBJS = $(patsubst %.cc,%.o,$(SRCS))
@@ -12,15 +13,10 @@ CXXFLAGS = -std=c++14
 ifndef DEBUG
 CXXFLAGS += -O2
 else
-CXXFLAGS += -g3
+CXXFLAGS += -g3 -DDEBUG
 endif
 
-ifndef TEST_FILE
-TEST_FILE = monster_test.cc
-endif
-
-all: $(OBJS)
-	$(CXX) $(CXXFLAGS) $(OBJS) ./test/$(TEST_FILE) -o $(EXEC)
+all: test
 
 %.o: %.cc
 	   $(CXX) $(CXXFLAGS) -c -o $@ $<
