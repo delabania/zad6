@@ -32,7 +32,5 @@ test: $(TESTS)
 	(./$(EXEC)_test && echo "\033[0;32mTest $@ passed (return code 0)\033[0m") || (echo "\033[0;31mTest $@ failed (return code $$?)\033[0m")
 
 clean:
-	rm ./*.o 2> /dev/null
-	rm ./$(EXEC) 2> /dev/null
-	rm ./$(EXEC)_test 2> /dev/null
+	rm -f ./*.o ./$(EXEC) ./$(EXEC)_test 2> /dev/null
 
