@@ -4,31 +4,49 @@
 #include <algorithm>
 
 /**
- * Time
+ * Clock
  */
 
-// virtual czy nie?
-void Time::tick(int t) {
-	_time += t;
-	_time %= _maxTime;
+// TODO: Trzymanie klasy zarzadzajacej czasem ma sens i poprawnie rozdziela
+// obowiazki, natomiast nie wiem czy nie prosciej trzymac 2 pointery na biez./maks.
+// czas (inaczej duzo funkcjonalnosci sie duplikuje + de facto nie pozwalamy na razie
+// uzytkownikom na zewnetrzna zmiane strategii, mozemy tylko zmienic startTime i maxTime
+void Clock::tick(const Time& t) {
+	const Time& maxTime = *_maxTime.get();
+	Time& time = *_time.get();
+
+	time = (time + t) % maxTime;
 }
 
-void Time::setStartTime(int t0) {
+void Clock::setStartTime(const Time& t0) {
 	assert(t0 >= 0);
-	_time = t0;
+
+	_time = std::make_unique<Time>(t0);
 }
 
-void Time::setMaxTime(int t1) {
+const Time* Clock::getStartTime() const {
+	return _time.get();
+
+}
+
+void Clock::setMaxTime(const Time& t1) {
 	assert(t1 >= 0);
-	_maxTime = t1;
+
+	_maxTime = std::make_unique<Time>(t1);
+}
+
+const Time* Clock::getMaxTime() const {
+	return _maxTime.get();
 }
 
 /**
- * TownTime
+ * TownClock
  */
 
-bool TownTime::isAttackTime() const {
-	return ((_time % 3 == 0) || (_time % 13 == 0)) && (_time % 7 != 0);
+bool TownClock::isAttackTime() const {
+	const Time& time = *_time.get();
+
+	return ((time % 3 == 0) || (time % 13 == 0)) && (time % 7 != 0);
 }
 
 
@@ -57,14 +75,15 @@ unsigned int Status::getAliveCitizens() {
  * SmallTown
  */
 //@TODO : czy to na pewno jest "ladnie"?
-SmallTown::SmallTown() : _time(std::make_unique<TownTime>()) {}
+SmallTown::SmallTown() : _clock(std::make_unique<TownClock>()) {}
 
-void SmallTown::tick(int timeStep) {
+void SmallTown::tick(Time timeStep) {
 	assert(timeStep >= 0);
-	if (_time->isAttackTime()) {
+
+	if (_clock->isAttackTime()) {
 		//@TODO: zasymuluj atak potworow na mieszkancow
 	}
-	_time->tick(timeStep);
+	_clock->tick(timeStep);
 
 }
 
@@ -78,14 +97,14 @@ Status SmallTown::getStatus() {
 
 SmallTown::Builder::Builder() : _town() {}
 
-SmallTown::Builder & SmallTown::Builder::startTime(int t0) {
-	assert(_town._time);
-	_town._time->setStartTime(t0);
+SmallTown::Builder & SmallTown::Builder::startTime(Time t0) {
+	assert(_town._clock);
+	_town._clock->setStartTime(t0);
 	return *this;
 }
 
-SmallTown::Builder & SmallTown::Builder::maxTime(int t1) {
-	_town._time->setMaxTime(t1);
+SmallTown::Builder & SmallTown::Builder::maxTime(Time t1) {
+	_town._clock->setMaxTime(t1);
 	return *this;
 }
 
@@ -102,7 +121,7 @@ SmallTown::Builder & SmallTown::Builder::monster(std::shared_ptr<Monster> m) {
 
 SmallTown SmallTown::Builder::build() {
 	assert(_town._monster.get());
-	// TODO: Sprawdzic poprawnosc Time (ustawiony czas startowy i maksymalny)
+	assert(_town._clock->getStartTime() && _town._clock->getMaxTime());
 	assert(_town._citizens.empty() == false);
 
 	return std::move(_town);

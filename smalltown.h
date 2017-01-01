@@ -9,21 +9,24 @@
 
 
 // Wzorzec strategia
-class Time {
+class Clock {
 protected:
-	unsigned int _time;
-	unsigned int _maxTime;
+	std::unique_ptr<Time> _time;
+	std::unique_ptr<Time> _maxTime;
 public:
-	void tick(int);
-	void setStartTime(int);
-	void setMaxTime(int);
+	virtual ~Clock() = default;
+
+	void tick(const Time&);
+	void setStartTime(const Time&);
+	const Time* getStartTime() const;
+	void setMaxTime(const Time&);
+	const Time* getMaxTime() const;
 	virtual bool isAttackTime() const = 0;
-	virtual ~Time() = default;
 };
 
-// Wystarczy stworzyc nowa klase dziedziczaca po Time,
+// Wystarczy stworzyc nowa klase dziedziczaca po Clock,
 // aby ustalic inna strategie ataku potworow
-class TownTime : public Time {
+class TownClock : public Clock {
 public:
 	virtual bool isAttackTime() const override;
 };
@@ -46,13 +49,13 @@ public:
 
 class SmallTown {
 private:
-	std::unique_ptr<Time> _time;
+	std::unique_ptr<Clock> _clock;
 	std::vector<std::shared_ptr<Citizen>> _citizens;
 	std::shared_ptr<Monster> _monster;
 public:
 	SmallTown();
 	Status getStatus();
-	void tick(int timeStep);
+	void tick(Time timeStep);
 
 	class Builder;
 };
@@ -63,8 +66,8 @@ private:
 public:
 	Builder();
 	Builder & monster(std::shared_ptr<Monster>);
-	Builder & startTime(int);
-	Builder & maxTime(int);
+	Builder & startTime(Time);
+	Builder & maxTime(Time);
 	Builder & citizen(std::shared_ptr<Citizen>);
 	SmallTown build();
 };

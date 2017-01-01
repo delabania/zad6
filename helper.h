@@ -5,6 +5,7 @@
 typedef int HealthPoints;
 typedef int AttackPower;
 typedef int Age;
+typedef unsigned int Time;
 
 
 #endif /*__HELPER_H__ */
