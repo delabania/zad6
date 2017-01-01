@@ -1,7 +1,7 @@
 #include "smalltown.h"
 #include <memory>
 #include <cassert>
-
+#include <algorithm>
 
 /**
  * Time
@@ -57,7 +57,7 @@ unsigned int Status::getAliveCitizens() {
  * SmallTown
  */
 //@TODO : czy to na pewno jest "ladnie"?
-SmallTown::SmallTown() : _time(std::make_shared<TownTime>()) {}
+SmallTown::SmallTown() : _time(std::make_unique<TownTime>()) {}
 
 void SmallTown::tick(int timeStep) {
 	assert(timeStep >= 0);
@@ -68,32 +68,43 @@ void SmallTown::tick(int timeStep) {
 
 }
 
+Status SmallTown::getStatus() {
+	unsigned int aliveCitizens = std::count_if(_citizens.begin(), _citizens.end(),
+			[](const std::shared_ptr<Citizen>& c) { return c->getHealth() > 0; });
 
-SmallTown::Builder::Builder() : _town(std::make_shared<SmallTown>()) {}
+	return Status(_monster->getName(), _monster->getHealth(), aliveCitizens);
+}
+
+
+SmallTown::Builder::Builder() : _town() {}
 
 SmallTown::Builder & SmallTown::Builder::startTime(int t0) {
-	assert(_town->_time);
-	_town->_time->setStartTime(t0);
+	assert(_town._time);
+	_town._time->setStartTime(t0);
 	return *this;
 }
 
 SmallTown::Builder & SmallTown::Builder::maxTime(int t1) {
-	_town->_time->setMaxTime(t1);
+	_town._time->setMaxTime(t1);
 	return *this;
 }
 
 SmallTown::Builder & SmallTown::Builder::citizen(std::shared_ptr<Citizen> c) {
-	_town->_citizens.push_back(c);
+	_town._citizens.push_back(c);
+	return *this;
+}
+
+SmallTown::Builder & SmallTown::Builder::monster(std::shared_ptr<Monster> m) {
+	_town._monster = m;
 	return *this;
 }
 
 
 SmallTown SmallTown::Builder::build() {
-	return *_town;
+	assert(_town._monster.get());
+	// TODO: Sprawdzic poprawnosc Time (ustawiony czas startowy i maksymalny)
+	assert(_town._citizens.empty() == false);
+
+	return std::move(_town);
 }
-
-
-
-
-
 

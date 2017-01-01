@@ -46,27 +46,27 @@ public:
 
 class SmallTown {
 private:
-	std::shared_ptr<Time> _time;
+	std::unique_ptr<Time> _time;
 	std::vector<std::shared_ptr<Citizen>> _citizens;
+	std::shared_ptr<Monster> _monster;
 public:
 	SmallTown();
 	Status getStatus();
 	void tick(int timeStep);
 
-	class Builder {
-	private:
-		std::shared_ptr<SmallTown> _town;
-	public:
-		Builder();
-		Builder & monster(std::shared_ptr<GroupOfMonsters>);
-		Builder & monster(std::shared_ptr<Monster>);
-		Builder & startTime(int);
-		Builder & maxTime(int);
-		Builder & citizen(std::shared_ptr<Citizen>);
-		SmallTown build();
-	};
-
+	class Builder;
 };
 
+class SmallTown::Builder {
+private:
+	SmallTown _town;
+public:
+	Builder();
+	Builder & monster(std::shared_ptr<Monster>);
+	Builder & startTime(int);
+	Builder & maxTime(int);
+	Builder & citizen(std::shared_ptr<Citizen>);
+	SmallTown build();
+};
 
 #endif /*__SMALLTOWN_H__*/
