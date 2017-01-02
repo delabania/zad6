@@ -40,9 +40,9 @@ private:
 	unsigned int _aliveCitizens;
 public:
 	Status(const std::string &, HealthPoints, unsigned int);
-	const std::string & getMonsterName();
-	HealthPoints getMonsterHealth();
-	unsigned int getAliveCitizens();
+	const std::string & getMonsterName() const;
+	HealthPoints getMonsterHealth() const;
+	unsigned int getAliveCitizens() const;
 };
 
 
@@ -54,8 +54,10 @@ private:
 	std::shared_ptr<Monster> _monster;
 public:
 	SmallTown();
-	Status getStatus();
+	Status getStatus() const;
 	void tick(Time timeStep);
+
+	const char* getOutcome() const;
 
 	class Builder;
 };

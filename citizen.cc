@@ -25,6 +25,8 @@ void Citizen::takeDamage(AttackPower damage) {
 	_health = damage > _health ? 0 : _health - damage;
 }
 
+void Citizen::OnDamagedBy(Monster&) {
+}
 
 /**
  * Adult
@@ -58,6 +60,10 @@ Sheriff::~Sheriff() {
 
 AttackPower Sheriff::getAttackPower() const {
 	return _attack;
+}
+
+void Sheriff::OnDamagedBy(Monster& monster) {
+	monster.takeDamage(_attack);
 }
 
 /**

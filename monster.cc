@@ -23,7 +23,10 @@ void SingleMonster::takeDamage(AttackPower damage) {
 	_health = damage > _health ? 0 : _health - damage;
 }
 
-
+void SingleMonster::attack(Citizen& citizen) {
+	citizen.takeDamage(_attack);
+	citizen.OnDamagedBy(*this);
+}
 
 /**
  * Zombie
@@ -76,6 +79,12 @@ void GroupOfMonsters::takeDamage(AttackPower damage) {
 	for (auto & m : _monsters)
 		m->takeDamage(damage);
 }
+
+void GroupOfMonsters::attack(Citizen& citizen) {
+	citizen.takeDamage(getAttackPower());
+	citizen.OnDamagedBy(*this);
+}
+
 
 std::string GroupOfMonsters::getName() const {
 	return "GroupOfMonsters";

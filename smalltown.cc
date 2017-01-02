@@ -60,13 +60,13 @@ Status::Status(const std::string & monsterName, HealthPoints monsterHealth,
 	_monsterHealth(monsterHealth),
 	_aliveCitizens(aliveCitizens) {}
 
-const std::string & Status::getMonsterName() {
+const std::string & Status::getMonsterName() const {
 	return _monsterName;
 }
-HealthPoints Status::getMonsterHealth() {
+HealthPoints Status::getMonsterHealth() const {
 	return _monsterHealth;
 }
-unsigned int Status::getAliveCitizens() {
+unsigned int Status::getAliveCitizens() const {
 	return _aliveCitizens;
 }
 
@@ -80,20 +80,38 @@ SmallTown::SmallTown() : _clock(std::make_unique<TownClock>()) {}
 void SmallTown::tick(Time timeStep) {
 	assert(timeStep >= 0);
 
-	if (_clock->isAttackTime()) {
-		//@TODO: zasymuluj atak potworow na mieszkancow
+	if (const char* outcome = getOutcome())
+		printf("%s\n", outcome);
+	else {
+		if (_clock->isAttackTime()) {
+			for (auto& citizen : _citizens)
+				_monster->attack(*citizen);
+			//@TODO: zasymuluj atak potworow na mieszkancow
+		}
 	}
-	_clock->tick(timeStep);
 
+	_clock->tick(timeStep);
 }
 
-Status SmallTown::getStatus() {
+Status SmallTown::getStatus() const {
 	unsigned int aliveCitizens = std::count_if(_citizens.begin(), _citizens.end(),
 			[](const std::shared_ptr<Citizen>& c) { return c->getHealth() > 0; });
 
 	return Status(_monster->getName(), _monster->getHealth(), aliveCitizens);
 }
 
+const char* SmallTown::getOutcome() const {
+	const auto& status = getStatus();
+
+	if (status.getMonsterHealth() > 0 && status.getAliveCitizens() > 0)
+		return nullptr;
+	else if (status.getMonsterHealth() > 0)
+		return "MONSTER WON";
+	else if (status.getAliveCitizens() > 0)
+		return "CITIZENS WON";
+	else
+		return "DRAW";
+}
 
 SmallTown::Builder::Builder() : _town() {}
 

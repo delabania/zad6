@@ -2,8 +2,10 @@
 #define __CITIZEN_H__
 
 #include "helper.h"
+#include "monster.h"
 #include <memory>
 
+class Monster;
 
 class Citizen {
 protected:
@@ -11,11 +13,14 @@ protected:
 	Age _age;
 	Citizen(HealthPoints, Age);
 
-public :
+public:
+	virtual ~Citizen() = default;
+
 	HealthPoints getHealth() const;
 	Age getAge() const;
 	void takeDamage(AttackPower);
-	virtual ~Citizen() = default;
+
+	virtual void OnDamagedBy(Monster&); // TODO: Nie jest to idealne/ostateczne miejsce
 };
 
 class Adult : public Citizen {
@@ -34,7 +39,9 @@ private:
 public:
 	Sheriff(HealthPoints, Age, AttackPower);
 	virtual ~Sheriff();
+
 	AttackPower getAttackPower() const;
+	virtual void OnDamagedBy(Monster&) override; // TODO: Nie jest to idealne/ostateczne miejsce
 };
 
 

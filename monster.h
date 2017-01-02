@@ -2,11 +2,14 @@
 #define __MONSTER_H__
 
 #include "helper.h"
+#include "citizen.h"
 #include <cassert>
 #include <memory>
 #include <vector>
 #include <initializer_list>
 #include <string>
+
+class Citizen;
 
 // Podstawowy abstrakcyjny interfejs potwora
 class Monster {
@@ -16,6 +19,8 @@ public:
 	virtual HealthPoints getHealth() const = 0;
 	virtual AttackPower getAttackPower() const = 0;
 	virtual void takeDamage(AttackPower damage) = 0;
+
+	virtual void attack(Citizen&) = 0; // TODO: wymaga lepszego miejsca/designu
 
 	virtual std::string getName() const = 0;
 };
@@ -33,6 +38,8 @@ public:
 	virtual HealthPoints getHealth() const override;
 	virtual AttackPower getAttackPower() const override;
 	virtual void takeDamage(AttackPower damage) override;
+
+	virtual void attack(Citizen& citizen) override;
 };
 
 class Zombie : public SingleMonster {
@@ -75,6 +82,8 @@ public:
 	virtual HealthPoints getHealth() const override;
 	virtual AttackPower getAttackPower() const override;
 	virtual void takeDamage(AttackPower damage) override;
+
+	virtual void attack(Citizen& citizen) override;
 
 	virtual std::string getName() const override;
 };
