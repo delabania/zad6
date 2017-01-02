@@ -86,7 +86,6 @@ void SmallTown::tick(Time timeStep) {
 		if (_clock->isAttackTime()) {
 			for (auto& citizen : _citizens)
 				_monster->attack(*citizen);
-			//@TODO: zasymuluj atak potworow na mieszkancow
 		}
 	}
 
