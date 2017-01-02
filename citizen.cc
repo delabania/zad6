@@ -48,7 +48,7 @@ Teenager::Teenager(HealthPoints health, Age age) :
  * Sheriff
  */
 Sheriff::Sheriff(HealthPoints health, Age age, AttackPower attack) :
-	Citizen(health, age) {
+	Citizen(health, age), _attack(attack) {
 	assert(18 <= age && age <= 100);
 	assert(attack >= 0);
 }
