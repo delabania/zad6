@@ -23,9 +23,14 @@ all: test
 
 test: $(TESTS)
 
+%_fail_test.cc: $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) $@ -o $(EXEC)_test
+	(./$(EXEC)_test && echo "\033[0;31mTest $@ failed (return code $$?, expected NOT 0)\033[0m") || (echo "\033[0;32mTest $@ passed (return code $$?, expected NOT 0)\033[0m")
+
+
 %_test.cc: $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) $@ -o $(EXEC)_test
-	(./$(EXEC)_test && echo "\033[0;32mTest $@ passed (return code 0)\033[0m") || (echo "\033[0;31mTest $@ failed (return code $$?)\033[0m")
+	(./$(EXEC)_test && echo "\033[0;32mTest $@ passed (return code $$?, expected 0)\033[0m") || (echo "\033[0;31mTest $@ failed (return code $$?, expected 0)\033[0m")
 
 clean:
 	rm -f ./*.o ./$(EXEC) ./$(EXEC)_test 2> /dev/null
