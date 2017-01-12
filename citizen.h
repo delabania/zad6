@@ -20,7 +20,7 @@ public:
 	Age getAge() const;
 	void takeDamage(AttackPower);
 
-	virtual void OnDamagedBy(Monster&); // TODO: Nie jest to idealne/ostateczne miejsce
+	virtual void OnDamagedBy(Monster&);
 };
 
 class Adult : public Citizen {
@@ -41,7 +41,7 @@ public:
 	virtual ~Sheriff();
 
 	AttackPower getAttackPower() const;
-	virtual void OnDamagedBy(Monster&) override; // TODO: Nie jest to idealne/ostateczne miejsce
+	virtual void OnDamagedBy(Monster&) override;
 };
 
 

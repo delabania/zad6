@@ -6,11 +6,6 @@
 /**
  * Clock
  */
-
-// TODO: Trzymanie klasy zarzadzajacej czasem ma sens i poprawnie rozdziela
-// obowiazki, natomiast nie wiem czy nie prosciej trzymac 2 pointery na biez./maks.
-// czas (inaczej duzo funkcjonalnosci sie duplikuje + de facto nie pozwalamy na razie
-// uzytkownikom na zewnetrzna zmiane strategii, mozemy tylko zmienic startTime i maxTime
 void Clock::tick(const Time& t) {
 	const Time& maxTime = *_maxTime.get();
 	Time& time = *_time.get();
@@ -74,7 +69,6 @@ unsigned int Status::getAliveCitizens() const {
 /**
  * SmallTown
  */
-//@TODO : czy to na pewno jest "ladnie"?
 SmallTown::SmallTown() : _clock(std::make_shared<TownClock>()) {}
 
 void SmallTown::tick(Time timeStep) {

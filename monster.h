@@ -20,7 +20,7 @@ public:
 	virtual AttackPower getAttackPower() const = 0;
 	virtual void takeDamage(AttackPower damage) = 0;
 
-	virtual void attack(Citizen&) = 0; // TODO: wymaga lepszego miejsca/designu
+	virtual void attack(Citizen&) = 0;
 
 	virtual std::string getName() const = 0;
 };
@@ -64,7 +64,6 @@ public:
 };
 
 
-//@TODO : co z martwymi potworami?
 // Konkretna implementacja grupy potworow
 class GroupOfMonsters : public Monster {
 private:
@@ -72,7 +71,6 @@ private:
 public:
 	virtual ~GroupOfMonsters() = default;
 
-	// 1. shared_ptr czy unique_ptr?
 	GroupOfMonsters(const std::vector<std::shared_ptr<Monster>>& monsters) :
 		_monsters(monsters) {}
 	// Kopiowanie initializer_list jest tanie (to tylko wrapper) i ogolnie przyjete (np. robi to STL)
