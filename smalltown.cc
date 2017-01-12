@@ -126,7 +126,12 @@ SmallTown::Builder & SmallTown::Builder::maxTime(Time t1) {
 }
 
 SmallTown::Builder & SmallTown::Builder::citizen(std::shared_ptr<Citizen> c) {
-	_town._citizens.push_back(c);
+	const auto it = std::find_if(_town._citizens.begin(), _town._citizens.end(),
+			[&c](const decltype(_town._citizens)::value_type& elem) { return elem.get() == c.get(); });
+
+	if (it == _town._citizens.end()) // Make sure we don't duplicate citizens
+		_town._citizens.push_back(c);
+
 	return *this;
 }
 
