@@ -19,7 +19,7 @@ AttackPower SingleMonster::getAttackPower() const {
 }
 
 void SingleMonster::takeDamage(AttackPower damage) {
-	assert(damage > 0);
+	assert(damage >= 0);
 	_health = damage > _health ? 0 : _health - damage;
 }
 
