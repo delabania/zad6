@@ -75,7 +75,7 @@ unsigned int Status::getAliveCitizens() const {
  * SmallTown
  */
 //@TODO : czy to na pewno jest "ladnie"?
-SmallTown::SmallTown() : _clock(std::make_unique<TownClock>()) {}
+SmallTown::SmallTown() : _clock(std::make_shared<TownClock>()) {}
 
 void SmallTown::tick(Time timeStep) {
 	assert(timeStep >= 0);
@@ -141,6 +141,6 @@ SmallTown SmallTown::Builder::build() {
 	assert(_town._clock->getStartTime() && _town._clock->getMaxTime());
 	assert(_town._citizens.empty() == false);
 
-	return std::move(_town);
+	return _town;
 }
 

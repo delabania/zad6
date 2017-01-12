@@ -49,7 +49,7 @@ public:
 
 class SmallTown {
 private:
-	std::unique_ptr<Clock> _clock;
+	std::shared_ptr<Clock> _clock;
 	std::vector<std::shared_ptr<Citizen>> _citizens;
 	std::shared_ptr<Monster> _monster;
 public:
